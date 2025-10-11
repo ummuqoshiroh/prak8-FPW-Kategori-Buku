@@ -5,12 +5,13 @@
     <div>
         <a href="/tambah-buku"><button>Tambah Buku</button></a>
     </div>
-    <table border="1">
+    <table border="1" cellpadding="5">
         <thead>
             <tr>
                 <th>Judul</th>
                 <th>Pengarang</th>
                 <th>Penerbit</th>
+                <th>Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -19,6 +20,17 @@
                 <td>{{ $buku->judul }}</td>
                 <td>{{ $buku->pengarang }}</td>
                 <td>{{ $buku->penerbit }}</td>
+                <td>
+                    <!-- tombol edit -->
+                    <a href="/buku/{{ $buku->id }}/edit"><button>Edit</button></a>
+
+                    <!-- tombol delete -->
+                    <form action="/buku/{{ $buku->id }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" onclick="return confirm('Yakin hapus data ini?')">Hapus</button>
+                    </form>
+                </td>
             </tr>
            @endforeach
         </tbody>
@@ -53,6 +65,7 @@
                 <th>Nama Barang</th>
                 <th>Jumlah</th>
                 <th>Keterangan</th>
+                <th>Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -61,6 +74,17 @@
                     <td>{{ $item->nama_barang }}</td>
                     <td>{{ $item->jumlah }}</td>
                     <td>{{ $item->keterangan }}</td>
+                    <td>
+                        <!-- tombol edit -->
+                        <a href="/kebutuhan/{{ $item->id }}/edit"><button>Edit</button></a>
+
+                        <!-- tombol delete -->
+                        <form action="/kebutuhan/{{ $item->id }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" onclick="return confirm('Yakin hapus kebutuhan ini?')">Hapus</button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
