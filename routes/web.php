@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/buku/{id}/edit', [BukuController::class, 'edit']);
     Route::put('/buku/{id}', [BukuController::class, 'update']);
     Route::delete('/buku/{id}', [BukuController::class, 'destroy']);
+    Route::get('/buku/create', [BukuController::class, 'create'])->name('buku.create');
+
 
     Route::post('/simpan-kebutuhan', [BukuController::class, 'storeKebutuhan']);
     Route::get('/kebutuhan/{id}/edit', [BukuController::class, 'editKebutuhan']);

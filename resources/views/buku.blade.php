@@ -11,20 +11,19 @@
                 <th>Judul</th>
                 <th>Pengarang</th>
                 <th>Penerbit</th>
+                <th>Kategori</th>
                 <th>Aksi</th>
             </tr>
         </thead>
         <tbody>
-           @foreach ($data as $buku )
+           @foreach ($data as $buku)
             <tr>
                 <td>{{ $buku->judul }}</td>
                 <td>{{ $buku->pengarang }}</td>
                 <td>{{ $buku->penerbit }}</td>
+                <td>{{ $buku->kategoriBuku->nama_kategori ?? '-' }}</td>
                 <td>
-                    <!-- tombol edit -->
                     <a href="/buku/{{ $buku->id }}/edit"><button>Edit</button></a>
-
-                    <!-- tombol delete -->
                     <form action="/buku/{{ $buku->id }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
@@ -75,10 +74,7 @@
                     <td>{{ $item->jumlah }}</td>
                     <td>{{ $item->keterangan }}</td>
                     <td>
-                        <!-- tombol edit -->
                         <a href="/kebutuhan/{{ $item->id }}/edit"><button>Edit</button></a>
-
-                        <!-- tombol delete -->
                         <form action="/kebutuhan/{{ $item->id }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')

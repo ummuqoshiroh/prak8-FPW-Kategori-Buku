@@ -23,6 +23,19 @@
         </div>
 
         <div>
+            <label for="">Kategori Buku</label>
+            <select name="kategori_buku_id" required>
+                <option value="">-- Pilih Kategori --</option>
+                @foreach($kategoriBuku as $kategori)
+                    <option value="{{ $kategori->id }}" 
+                        {{ $buku->kategori_buku_id == $kategori->id ? 'selected' : '' }}>
+                        {{ $kategori->nama_kategori }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div>
             <button type="submit">Update</button>
             <a href="/buku"><button type="button">Batal</button></a>
         </div>

@@ -18,6 +18,16 @@
             <input type="text" name="penerbit">
         </div>
         <div>
+            <label for="">Kategori Buku</label>
+            <select name="kategori_buku_id" required>
+            <option value="">-- Pilih Kategori --</option>
+            @foreach($kategoriBuku as $kategori)
+                <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
+             @endforeach
+            </select>
+
+        </div>
+        <div>
             <button type="Submit">Simpan</button>
         </div>
     </form>

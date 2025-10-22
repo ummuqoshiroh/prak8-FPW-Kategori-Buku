@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Buku;
-use App\Models\Kebutuhan; 
+use App\Models\Kebutuhan;
+use App\Models\KategoriBuku;
 
 class BukuController extends Controller
 {
     public function index()
     {
-        $dataBuku = Buku::all();
+        $dataBuku = Buku::with('kategoriBuku')->get();
         $dataKebutuhan = class_exists(Kebutuhan::class) ? Kebutuhan::all() : collect();
 
         return view('buku', [
@@ -21,7 +22,8 @@ class BukuController extends Controller
 
     public function create()
     {
-        return view('tambah-buku');
+        $kategoriBuku = KategoriBuku::all();
+        return view('tambah-buku', compact('kategoriBuku'));
     }
 
     public function store(Request $request)
@@ -30,9 +32,10 @@ class BukuController extends Controller
             'judul' => 'required|string|max:255',
             'pengarang' => 'required|string|max:255',
             'penerbit' => 'required|string|max:255',
+            'kategori_buku_id' => 'nullable|exists:kategori_buku,id',
         ]);
 
-        Buku::create($request->only(['judul','pengarang','penerbit']));
+        Buku::create($request->only(['judul','pengarang','penerbit','kategori_buku_id']));
 
         return redirect('/buku')->with('success', 'Buku berhasil ditambahkan!');
     }
@@ -53,62 +56,62 @@ class BukuController extends Controller
     }
 
     // EDIT Buku
-public function edit($id)
-{
-    $buku = Buku::findOrFail($id);
-    return view('edit-buku', compact('buku'));
-}
+    public function edit($id)
+    {
+        $buku = Buku::findOrFail($id);
+        $kategoriBuku = KategoriBuku::all();
+        return view('edit-buku', compact('buku', 'kategoriBuku'));
+    }
 
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'judul' => 'required|string|max:255',
-        'pengarang' => 'required|string|max:255',
-        'penerbit' => 'required|string|max:255',
-    ]);
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'pengarang' => 'required|string|max:255',
+            'penerbit' => 'required|string|max:255',
+            'kategori_buku_id' => 'nullable|exists:kategori_buku,id',
+        ]);
 
-    $buku = Buku::findOrFail($id);
-    $buku->update($request->all());
+        $buku = Buku::findOrFail($id);
+        $buku->update($request->only(['judul','pengarang','penerbit','kategori_buku_id']));
 
-    return redirect('/buku')->with('success', 'Buku berhasil diupdate!');
-}
+        return redirect('/buku')->with('success', 'Buku berhasil diupdate!');
+    }
 
-public function destroy($id)
-{
-    $buku = Buku::findOrFail($id);
-    $buku->delete();
+    public function destroy($id)
+    {
+        $buku = Buku::findOrFail($id);
+        $buku->delete();
 
-    return redirect('/buku')->with('success', 'Buku berhasil dihapus!');
-}
+        return redirect('/buku')->with('success', 'Buku berhasil dihapus!');
+    }
 
-// EDIT Kebutuhan
-public function editKebutuhan($id)
-{
-    $item = Kebutuhan::findOrFail($id);
-    return view('edit-kebutuhan', compact('item'));
-}
+    // EDIT Kebutuhan
+    public function editKebutuhan($id)
+    {
+        $item = Kebutuhan::findOrFail($id);
+        return view('edit-kebutuhan', compact('item'));
+    }
 
-public function updateKebutuhan(Request $request, $id)
-{
-    $request->validate([
-        'nama_barang' => 'required|string|max:255',
-        'jumlah' => 'required|integer',
-        'keterangan' => 'nullable|string|max:255',
-    ]);
+    public function updateKebutuhan(Request $request, $id)
+    {
+        $request->validate([
+            'nama_barang' => 'required|string|max:255',
+            'jumlah' => 'required|integer',
+            'keterangan' => 'nullable|string|max:255',
+        ]);
 
-    $item = Kebutuhan::findOrFail($id);
-    $item->update($request->all());
+        $item = Kebutuhan::findOrFail($id);
+        $item->update($request->all());
 
-    return redirect('/buku')->with('success', 'Kebutuhan berhasil diupdate!');
-}
+        return redirect('/buku')->with('success', 'Kebutuhan berhasil diupdate!');
+    }
 
-public function destroyKebutuhan($id)
-{
-    $item = Kebutuhan::findOrFail($id);
-    $item->delete();
+    public function destroyKebutuhan($id)
+    {
+        $item = Kebutuhan::findOrFail($id);
+        $item->delete();
 
-    return redirect('/buku')->with('success', 'Kebutuhan berhasil dihapus!');
-}
-
-
+        return redirect('/buku')->with('success', 'Kebutuhan berhasil dihapus!');
+    }
 }
